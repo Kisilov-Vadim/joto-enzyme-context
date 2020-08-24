@@ -3,7 +3,7 @@ import './App.css';
 import hookActions from './actions/hookActions';
 import languageContext from './contexts/languageContext';
 import successContext from './contexts/successContext';
-import guessedWordsContext from './contexts/guessedWordsContext';
+import GuessedWordsContext from './contexts/guessedWordsContext';
 
 import LanguagePicker from './LanguagePicker';
 import Input from './Input';
@@ -34,6 +34,7 @@ function App() {
     reducer,
     { secretWord: null, language: 'en' }
   )
+  const {GuessedWordsProvider} = GuessedWordsContext;
 
   const setSecretWord = (secretWord) =>
     dispatch({ type: "setSecretWord", payload: secretWord });
@@ -61,13 +62,13 @@ function App() {
       <h1>Jotto</h1>
       <languageContext.Provider value={state.language}>
         <LanguagePicker setLanguage={setLanguage} />
-        <guessedWordsContext.GuessedWordsProvider>
+        <GuessedWordsProvider>
           <successContext.SuccessProvider>
             <Congrats />
             <Input secretWord={state.secretWord} />
           </successContext.SuccessProvider>
           <GuessedWords />
-        </guessedWordsContext.GuessedWordsProvider>
+        </GuessedWordsProvider>
       </languageContext.Provider>
     </div>
   );

@@ -5,8 +5,10 @@ import { findByTestAttr, checkProps } from '../test/testUtils';
 import Input from './Input';
 import languageContext from './contexts/languageContext';
 import successContext from './contexts/successContext';
-import guessedWordsContext from './contexts/guessedWordsContext';
+import GuessedWordsContext from './contexts/guessedWordsContext';
 
+
+const { GuessedWordsProvider } = GuessedWordsContext;
 /**
 * Create ReactWrapper for Input component for testing
 * @param {object} testValues - Context and props values for this specific test.
@@ -20,9 +22,9 @@ const setup = ({ language, secretWord, success }) => {
   return mount(
     <languageContext.Provider value={language} >
       <successContext.SuccessProvider value={[success, jest.fn()]}>
-        <guessedWordsContext.GuessedWordsProvider>
+        <GuessedWordsProvider>
           <Input secretWord={secretWord} />
-        </guessedWordsContext.GuessedWordsProvider>
+        </GuessedWordsProvider>
       </successContext.SuccessProvider>
     </languageContext.Provider>
   );
@@ -47,6 +49,7 @@ describe('state controlled input field', () => {
     React.useState = jest.fn(() => ["", mockSetCurrentGuess]);
     wrapper = setup({});
   });
+
   test('state updates with value of input box upon change', () => {
     const inputBox = findByTestAttr(wrapper, 'input-box');
 
@@ -55,6 +58,7 @@ describe('state controlled input field', () => {
 
     expect(mockSetCurrentGuess).toHaveBeenCalledWith('train');
   });
+
   test('field is cleared upon submit button click', () => {
     const submitButton = findByTestAttr(wrapper, 'submit-button');
 
@@ -69,6 +73,7 @@ describe('languagePicker', () => {
     const submitButton = findByTestAttr(wrapper, 'submit-button');
     expect(submitButton.text()).toBe('Submit');
   });
+  
   test('correctly renders congrats string in emoji', () => {
     const wrapper = setup({ language: "emoji" });
     const submitButton = findByTestAttr(wrapper, 'submit-button');
